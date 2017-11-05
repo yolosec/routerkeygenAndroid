@@ -38,7 +38,6 @@
     <string name="msg_scanstarted">Pesquisa iniciada</string>
     <string name="msg_wifienabling">Activando Wifi</string>
     <string name="msg_results">Seleccione uma das senhas para copiá-la.\nAs Preferências de Wifi irão abrir onde pode usá-la para teste.</string>
-    <string name="manual_mac_separator">:</string>
     <string name="not_auto_connect_waiting">A esperar pela disconecção da ligação atual</string>
     <string name="not_auto_connect_key_testing">A testar <xliff:g id="key">%1$s</xliff:g></string>
     <string name="not_correct_key_testing"><xliff:g id="key">%1$s</xliff:g> é a senha correta.</string>
@@ -93,7 +92,7 @@
     <string name="pref_donate_google_play">Donativo (Google Play)</string>
     <string name="pref_donate_why">Ofereça-me um café se gostou desta aplicação</string>
     <string name="pref_about">Sobre Router Keygen</string>
-    <string name="pref_about_desc">Router Keygen calcula senhas de origem para vários routers.\n\n<a href="http://routerkeygen.github.io/">Website do Projecto</a>\n\n<a href="https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html">Privacy policy</a>\n\nPlease use the application at your own risk and responsibility. It is only for educational and research purposes and to assess your home router security. Do not use the application to connect to networks you are not authorized to. Application is not intended as a tool for attackers.\n\nVersão: </string>
+    <string name="pref_about_desc">Router Keygen calcula senhas de origem para vários routers.\n\n<a href="http://routerkeygen.github.io/">Website do Projecto</a>\n\nVersão: </string>
     <string name="pref_native">Cálculo Nativo</string>
     <string name="pref_hinton_native">Calcular no telemóvel se falhar ao procurar o dicionário</string>
     <string name="pref_hintoff_native">Só avisa se não conseguir encontrar no dicionário</string>
@@ -176,6 +175,8 @@
          Use string with quotes if you want a space
     -->
     <string name="changelog_header_version">"Versão "</string>
+    <string name="msg_nolocationpermission">Não há permissão para procurar redes. Por favor, ative a permissão de localização.</string>
+    <string name="open_app_settings">Abrir configurações da aplicação</string>
     <string name="pref_privacy_policy">Privacy policy</string>
     <!-- UNTRANSLATED -->
 

@@ -38,7 +38,6 @@
     <string name="msg_scanstarted">La scansione è iniziata</string>
     <string name="msg_wifienabling">Sto abilitando il Wifi</string>
     <string name="msg_results">Clicca su una delle chiavi per copiarla. Appariranno le opzioni del Wifi dove potrai usarla per fare dei test.</string>
-    <string name="manual_mac_separator">:</string>
     <string name="not_auto_connect_waiting">In attesa di disconnettersi dalla rete attuale</string>
     <string name="not_auto_connect_key_testing">Prova in corso <xliff:g id="key">%1$s</xliff:g></string>
     <string name="not_correct_key_testing"><xliff:g id="key">%1$s</xliff:g> è la chiave corretta.</string>
@@ -95,7 +94,7 @@
     <string name="pref_donate_why">Comprami un caffè se ti è piaciuta quest\'applicazione</string>
     <string name="pref_about">Riguardo a Router Keygen</string>
     <string name="pref_about_desc">Router Keygen calcola le password di default per molti router di uso comune.\n\n
-<a href="http://routerkeygen.github.io/">Sito del Progetto</a>\n\n<a href="https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html">Privacy policy</a>\n\nPlease use the application at your own risk and responsibility. It is only for educational and research purposes and to assess your home router security. Do not use the application to connect to networks you are not authorized to. Application is not intended as a tool for attackers.\n\nVersione: </string>
+<a href="http://routerkeygen.github.io/">Sito del Progetto</a>\n\nVersione: </string>
     <string name="pref_native">Calcolo nativo</string>
     <string name="pref_hinton_native">Calcola in altro modo se fallisce nel trovare il dizionario</string>
     <string name="pref_hintoff_native">Avverti solo se fallisce nel trovare il dizionario</string>
@@ -177,6 +176,8 @@
          Use string with quotes if you want a space
     -->
     <string name="changelog_header_version">"Versione "</string>
+    <string name="msg_nolocationpermission">Nessun permesso per eseguire la scansione della rete. Abilita l\'autorizzazione per la località.</string>
+    <string name="open_app_settings">Apri le impostazioni dell\'app</string>
     <string name="pref_privacy_policy">Privacy policy</string>
 
 </resources>

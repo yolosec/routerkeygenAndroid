@@ -38,7 +38,6 @@
     <string name="msg_scanstarted">Escaneo iniciado</string>
     <string name="msg_wifienabling">Habilitando WiFi</string>
     <string name="msg_results">Haz click en una de las claves para copiarla. \nDespués se abrirá la configuración WiFi donde la puedes "probar" ;).</string>
-    <string name="manual_mac_separator">:</string>
     <string name="not_auto_connect_waiting">Esperando a que la red actual se desconecte</string>
     <string name="not_auto_connect_key_testing">Probando <xliff:g id="key">%1$s</xliff:g></string>
     <string name="not_correct_key_testing"><xliff:g id="key">%1$s</xliff:g>es la clave correcta.</string>
@@ -91,7 +90,7 @@
     <string name="pref_donate_why">Cómprame un café si te gustó ésta aplicación.</string>
     <string name="pref_about">Acerca de Router Keygen</string>
     <string name="pref_about_desc">Router Keygen calcula los passwords por defecto para varios routers.\n\n
-<a href="http://routerkeygen.github.io/">Sitio del Proyecto</a><a href="https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html">Privacy policy</a>\n\n\n\nPlease use the application at your own risk and responsibility. It is only for educational and research purposes and to assess your home router security. Do not use the application to connect to networks you are not authorized to. Application is not intended as a tool for attackers.\n\nVersión: </string>
+<a href="http://routerkeygen.github.io/">Sitio del Proyecto</a>\n\nVersión: </string>
     <string name="pref_native">Cálculo Nativo</string>
     <string name="pref_hinton_native">Calculando sobre el objetivo si no encuentra el diccionario</string>
     <string name="pref_hintoff_native">Sólo avisa si no encuentra el diccionario.</string>
@@ -175,6 +174,8 @@
     -->
     <string name="changelog_header_version">"Version "</string>
     <string name="pref_privacy_policy">Privacy policy</string>
+    <string name="msg_nolocationpermission">Sin permiso para escanear la red. Por favor habilite el permiso de ubicación.</string>
+    <string name="open_app_settings">Abra la configuración de la aplicación</string>
     <!--UNTRANSLATED-->
 
 </resources>

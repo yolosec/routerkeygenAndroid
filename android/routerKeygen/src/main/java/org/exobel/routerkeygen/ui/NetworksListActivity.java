@@ -19,18 +19,26 @@
 
 package org.exobel.routerkeygen.ui;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
 import android.view.Menu;
@@ -49,6 +57,7 @@ import org.exobel.routerkeygen.algorithms.WiFiNetwork;
 public class NetworksListActivity extends Activity implements
         NetworksListFragment.OnItemSelectionListener, OnScanListener {
     private final static String LAST_DIALOG_TIME = "last_time";
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 1;
     private boolean mTwoPane;
     private NetworksListFragment networkListFragment;
     private WifiManager wifi;
@@ -59,6 +68,7 @@ public class NetworksListActivity extends Activity implements
     private final Handler mHandler = new Handler();
     private boolean wifiState;
     private boolean wifiOn;
+    private boolean scanPermission = true;
     private boolean autoScan;
     private boolean analyticsOptIn;
     private long autoScanInterval;
@@ -160,6 +170,11 @@ public class NetworksListActivity extends Activity implements
                     startActivity(new Intent(this, ManualInputActivity.class));
                 }
             case R.id.wifi_scan:
+                if (!scanPermission) {
+                    Toast.makeText(this, R.string.msg_nolocationpermission, Toast.LENGTH_SHORT)
+                            .show();
+                    return true;
+                }
                 scan();
                 return true;
             case R.id.pref:
@@ -194,7 +209,41 @@ public class NetworksListActivity extends Activity implements
     public void onResume() {
         super.onResume();
         getPrefs();
-        if (autoScan) {
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            scanPermission = false;
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            scanPermission = true;
+        }
+        if (!scanPermission) {
+            networkListFragment.setMessage(R.string.msg_nolocationpermission);
+            return;
+        }
+        scan();
+        if (autoScan && scanPermission) {
             mHandler.removeCallbacks(mAutoScanTask);
             mHandler.postDelayed(mAutoScanTask, autoScanInterval * 1000L);
         } else
@@ -227,9 +276,26 @@ public class NetworksListActivity extends Activity implements
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    scanPermission = true;
+                    scan();
+                }
+            }
+        }
+    }
+
     private void scan() {
         if (!wifiState && !wifiOn) {
             networkListFragment.setMessage(R.string.msg_nowifi);
+            return;
+        }
+        if (!scanPermission) {
             return;
         }
         registerReceiver(scanFinished, new IntentFilter(

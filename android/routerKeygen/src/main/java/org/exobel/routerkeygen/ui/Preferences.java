@@ -19,6 +19,7 @@
 
 package org.exobel.routerkeygen.ui;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -46,7 +47,10 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,6 +114,7 @@ public class Preferences extends PreferenceActivity {
     private static final int DIALOG_ERROR = 1005;
     private static final int DIALOG_UPDATE_NEEDED = 1006;
     private static final int DIALOG_CHANGELOG = 1007;
+    private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 1;
     private LastVersion lastVersion;
     private String currentVersion = null;
     private Integer currentCode = null;
@@ -122,40 +127,7 @@ public class Preferences extends PreferenceActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         findPreference("download").setOnPreferenceClickListener(
-                new OnPreferenceClickListener() {
-                    public boolean onPreferenceClick(Preference preference) {
-                        if (isDictionaryServiceRunning()) {
-                            Toast.makeText(
-                                    getBaseContext(),
-                                    getString(R.string.pref_msg_download_running),
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-                        if (netInfo == null
-                                || !netInfo.isConnectedOrConnecting()) {
-                            Toast.makeText(getBaseContext(),
-                                    getString(R.string.pref_msg_no_network),
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-
-                        // Don't complain about dictionary size if user is on a
-                        // wifi connection
-                        if ((((WifiManager) getBaseContext().getApplicationContext().getSystemService(
-                                Context.WIFI_SERVICE))).getConnectionInfo()
-                                .getSSID() != null) {
-                            try {
-                                checkCurrentDictionary();
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        } else
-                            showDialog(DIALOG_ASK_DOWNLOAD);
-                        return true;
-                    }
-                });
+                preference -> fetchDictionary());
 
         final PreferenceCategory mCategory = (PreferenceCategory) findPreference("2section");
 //        if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
@@ -211,7 +183,6 @@ public class Preferences extends PreferenceActivity {
                         .getBoolean(R.bool.autoScanDefault)));
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -274,7 +245,7 @@ public class Preferences extends PreferenceActivity {
                         .getSystemService(LAYOUT_INFLATER_SERVICE);
                 View layout = inflater.inflate(R.layout.about_dialog,
                         (ViewGroup) findViewById(R.id.tabhost));
-                TabHost tabs = (TabHost) layout.findViewById(R.id.tabhost);
+                TabHost tabs = layout.findViewById(R.id.tabhost);
                 tabs.setup();
                 TabSpec tspec1 = tabs.newTabSpec("about");
                 tspec1.setIndicator(getString(R.string.pref_about));
@@ -373,7 +344,7 @@ public class Preferences extends PreferenceActivity {
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 ChangeLogListView chgList = (ChangeLogListView) layoutInflater
                         .inflate(R.layout.dialog_changelog,
-                                (ViewGroup)this.getWindow().getDecorView().getRootView(), false);
+                                (ViewGroup) this.getWindow().getDecorView().getRootView(), false);
                 builder.setTitle(R.string.pref_changelog)
                         .setView(chgList)
                         .setPositiveButton(android.R.string.ok,
@@ -389,7 +360,6 @@ public class Preferences extends PreferenceActivity {
         return builder.create();
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void checkCurrentDictionary() throws FileNotFoundException {
         final String myDicFile = PreferenceManager.getDefaultSharedPreferences(
                 getBaseContext()).getString(dicLocalPref, null);
@@ -586,4 +556,63 @@ public class Preferences extends PreferenceActivity {
         return VERSION;
     }
 
+    private boolean fetchDictionary() {
+        if (isDictionaryServiceRunning()) {
+            Toast.makeText(
+                    getBaseContext(),
+                    getString(R.string.pref_msg_download_running),
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo == null
+                || !netInfo.isConnectedOrConnecting()) {
+            Toast.makeText(getBaseContext(),
+                    getString(R.string.pref_msg_no_network),
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+            return true;
+        }
+
+        // Don't complain about dictionary size if user is on a
+        // wifi connection
+        if ((((WifiManager) getBaseContext().getApplicationContext().getSystemService(
+                Context.WIFI_SERVICE))).getConnectionInfo()
+                .getSSID() != null) {
+            try {
+                checkCurrentDictionary();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else
+            showDialog(DIALOG_ASK_DOWNLOAD);
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fetchDictionary();
+                } else {
+                    Toast.makeText(getBaseContext(),
+                            getString(R.string.msg_no_write_permissions),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 }

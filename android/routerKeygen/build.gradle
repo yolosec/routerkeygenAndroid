@@ -11,12 +11,13 @@ android {
 
     defaultConfig {
         applicationId "org.exobel.routerkeygen"
-        versionCode 1
+        versionCode 41
+        versionName "4.0.1"
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled false
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -92,6 +93,10 @@ def getNdkDir() {
 
 def getNdkBuildCmd() {
     def ndkBuild = getNdkDir() + File.separator + "ndk-build"
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        ndkBuild += ".cmd"
+    }
+
     return ndkBuild
 }
 
@@ -99,9 +104,10 @@ def getNdkBuildCmd() {
 dependencies {
     compile project(':aFileChooser')
 
-    implementation 'com.android.support:support-compat:27.0.0'
-    implementation 'com.android.support:support-core-ui:27.0.0'
-    implementation 'com.android.support:support-core-utils:27.0.0'
-
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:support-compat:27.0.1'
+    implementation 'com.android.support:support-core-ui:27.0.1'
+    implementation 'com.android.support:support-core-utils:27.0.1'
+    implementation 'com.android.support:support-fragment:27.0.1'
+    implementation ('com.google.android.gms:play-services-location:11.6.0', { exclude module: 'support-v4' })
+    testImplementation 'junit:junit:4.12'
 }

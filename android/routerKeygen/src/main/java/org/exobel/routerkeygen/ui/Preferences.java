@@ -94,6 +94,7 @@ public class Preferences extends PreferenceActivity {
 
     public final static String GOOGLE_PLAY_DOWNLOADER = "org.doublecheck.wifiscanner";
 
+    public static final String PRIVACY_POLICY_URL = "https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html";
     public static final String PUB_DOWNLOAD = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RouterKeygen_v3.dic";
     public static final String VERSION = "3.17.0";
     private static final String PUB_DIC_CFV = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RKDictionary.cfv";
@@ -254,6 +255,14 @@ public class Preferences extends PreferenceActivity {
                 new OnPreferenceClickListener() {
                     public boolean onPreferenceClick(Preference preference) {
                         showDialog(DIALOG_ABOUT);
+                        return true;
+                    }
+                });
+        findPreference("privacy_policy").setOnPreferenceClickListener(
+                new OnPreferenceClickListener() {
+                    public boolean onPreferenceClick(Preference preference) {
+                        final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL));
+                        startActivity(browserIntent);
                         return true;
                     }
                 });

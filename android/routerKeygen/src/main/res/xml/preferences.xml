@@ -118,6 +118,12 @@
         <Preference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:key="privacy_policy"
+            android:title="@string/pref_privacy_policy" />
+
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:key="about"
             android:title="@string/pref_about" />
     </PreferenceCategory>

@@ -107,7 +107,7 @@ public class AutoConnectService extends Service implements onConnectionListener 
     @SuppressWarnings("deprecation")
     public void onCreate() {
         handler = new Handler();
-        wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mReceiver = new AutoConnectManager(this);
@@ -367,7 +367,7 @@ public class AutoConnectService extends Service implements onConnectionListener 
             return;
         }
 
-        final WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
+        final WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService (Context.WIFI_SERVICE);
         final WifiInfo wifiInfo = wifiManager == null ? null : wifiManager.getConnectionInfo();
         final String connectedSsid = wifiInfo == null ? null : wifiInfo.getSSID();
         Log.d(TAG, String.format("onSuccess, connected to: %s, state: %s, error: %s",

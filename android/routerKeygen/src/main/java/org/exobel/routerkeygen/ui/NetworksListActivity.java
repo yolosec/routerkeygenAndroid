@@ -83,7 +83,7 @@ public class NetworksListActivity extends Activity implements
             mTwoPane = true;
             networkListFragment.setActivateOnItemClick(true);
         }
-        wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         wifiState = wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED
                 || wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLING;

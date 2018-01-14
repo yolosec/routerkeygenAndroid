@@ -104,6 +104,6 @@ def getNdkBuildCmd() {
 
 dependencies {
     compile project(':aFileChooser')
-    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:support-v4:26.1.0'
     testCompile 'junit:junit:4.12'
 }

@@ -8,7 +8,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     defaultConfig {
         applicationId "org.exobel.routerkeygen"
         versionCode 65
@@ -17,7 +16,6 @@ android {
         targetSdkVersion 27
         multiDexEnabled false
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -38,36 +36,29 @@ android {
             applicationId "net.yolosec.routerkeygen2"
         }
     }
-
     sourceSets.main {
         jniLibs.srcDir 'src/main/libs' //set libs as .so's location instead of jniLibs
         jni.srcDirs = [] //disable automatic ndk-build call with auto-generated Android.mk
     }
-
     // call regular ndk-build(.cmd) script from app directory
     task ndkBuild(type: Exec) {
         workingDir file('src/main')
         commandLine getNdkBuildCmd()
     }
-
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
     }
-
     task cleanNative(type: Exec) {
         workingDir file('src/main')
         commandLine getNdkBuildCmd(), 'clean'
     }
-
     clean.dependsOn cleanNative
-
     testOptions {
         unitTests.all {
             // All the usual Gradle options.
             jvmArgs '-XX:MaxPermSize=256m'
         }
     }
-
     lintOptions {
         abortOnError false
     }
@@ -103,11 +94,12 @@ def getNdkBuildCmd() {
 
 dependencies {
     compile project(':aFileChooser')
-
     implementation 'com.android.support:support-compat:27.0.1'
     implementation 'com.android.support:support-core-ui:27.0.1'
     implementation 'com.android.support:support-core-utils:27.0.1'
     implementation 'com.android.support:support-fragment:27.0.1'
-    implementation ('com.google.android.gms:play-services-location:11.6.0', { exclude module: 'support-v4' })
+    implementation('com.google.android.gms:play-services-location:11.6.0', {
+        exclude module: 'support-v4'
+    })
     testImplementation 'junit:junit:4.12'
 }

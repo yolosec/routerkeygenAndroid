@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_org_exobel_routerkeygen_algorithms_UpcKeygen_upcNati
   char pass[9], tmpstr[17];
   uint8_t h1[16], h2[16];
   uint32_t hv[4], w1, w2, i, cnt=0, pidx;
-  const char * serial_prefixes[] = { "SAAP", "SAPP", "SBAP" };
+  const char * serial_prefixes[] = { "SAAP", "SAPP", "SBAP", "UAAP" };
   const int prefixes_cnt = (sizeof(serial_prefixes)/sizeof(serial_prefixes[0]));
 
   target = strtoul(e_ssid_nullterm + 3, NULL, 0);

@@ -30,7 +30,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme">
+        android:theme="@style/Theme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".ui.Preferences"
             android:configChanges="screenSize|orientation|keyboard"

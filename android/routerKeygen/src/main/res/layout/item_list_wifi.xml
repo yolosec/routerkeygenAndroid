@@ -61,7 +61,6 @@
             android:ellipsize="marquee"
             android:focusable="false"
             android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="1"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"

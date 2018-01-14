@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.3'
     flavorDimensions 'default'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId "org.exobel.routerkeygen"
-        versionCode 41
-        versionName "4.0.1"
+        versionCode 65
+        versionName "4.0.4"
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled false

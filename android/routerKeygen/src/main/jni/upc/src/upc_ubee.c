@@ -88,7 +88,8 @@ const char * profanities[] = {
               "WOOER",      "WOOSH",      "WOOZY",      "YOBBO",      "ZOOID",      "ZOOKS"
 };
 
-
+int ubee_generate_pass_raw(unsigned const char * mac, unsigned char * hash_buff, unsigned char * passwd);
+int ubee_enerate_profanity_free_pass(unsigned char * hash_buff, unsigned char const * new_pass);
 int ubee_generate_ssid(unsigned const char * mac, unsigned char * ssid, size_t * len)
 {
     MD5_CTX ctx;
@@ -135,7 +136,7 @@ int ubee_generate_pass(unsigned const char * mac, unsigned char * passwd, size_t
 
     ubee_generate_pass_raw(mac, hash_buff, passwd);
     for(i=0; i<PROFANITY_COUNT; i++){
-        if (strstr(passwd, profanities[i]) != NULL){
+        if (strstr((const char *)passwd, profanities[i]) != NULL){
             p=1;
             break;
         }

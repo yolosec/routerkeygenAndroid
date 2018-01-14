@@ -109,16 +109,18 @@ public class UpcKeygen extends Keygen {
     @Override
     public List<String> getKeys() {
         String[] results = null;
+        final String targetSsid = getSsidName();
+        final String targetMac = getMacAddress();
+        final boolean macEntered = targetMac != null && !targetMac.isEmpty();
+        final boolean is5G = getFrequency() > 5000;
+
         try {
-            final String targetSsid = getSsidName();
-            final String targetMac = getMacAddress();
-            final boolean is5G = getFrequency() > 5000;
             Log.d(TAG, String.format("Starting a new task for ssid: %s, frequency: %d", targetSsid, getFrequency()));
 
             // Ubee extension first, better matching.
-            final BigInteger macInt = new BigInteger(targetMac, 16);
-            final BigInteger macStart = macInt.subtract(BigInteger.valueOf(10));
-            for(int i=0; i<20; i++){
+            final BigInteger macInt = macEntered ? new BigInteger(targetMac, 16) : null;
+            final BigInteger macStart = macEntered ? macInt.subtract(BigInteger.valueOf(10)) : null;
+            for(int i=0; macEntered && i<20; i++){
                 final BigInteger curMac = macStart.add(BigInteger.valueOf(i));
                 final String curSsid = upcUbeeSsid(curMac.toByteArray());
                 if (targetSsid.equalsIgnoreCase(curSsid)){
@@ -130,8 +132,8 @@ public class UpcKeygen extends Keygen {
             }
 
             // Ubee extension - purely on mac address, received (-4, -3, -2, -1, -0, +1, +2) for 2.4 GHz
-            final String upperMac = targetMac.toUpperCase();
-            if (upperMac.startsWith("647C34")) {
+            final String upperMac = macEntered ? targetMac.toUpperCase() : null;
+            if (macEntered && upperMac.startsWith("647C34")) {
                 final BigInteger macStart2 = macInt.subtract(BigInteger.valueOf(4));
                 for (int i = 0; i < 7; i++) {
                     final BigInteger curMac = macStart2.add(BigInteger.valueOf(i));
@@ -143,7 +145,13 @@ public class UpcKeygen extends Keygen {
                     }
                 }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in native computation", e);
+            setErrorCode(R.string.msg_err_native);
+        }
 
+        // Original UPC generator
+        try {
             // upc_keys.c attack.
             if (targetSsid.startsWith("UPC")) {
                 upcNative((targetSsid+"\0").getBytes("US-ASCII"), is5G);

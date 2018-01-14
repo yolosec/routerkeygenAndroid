@@ -39,7 +39,7 @@ public class Wifi {
 
     private static final ConfigurationSecurities ConfigSec = ConfigurationSecurities.newInstance();
 
-    private static final String TAG = "Wifi Connecter";
+    private static final String TAG = "WifiConnector";
     private static final int MAX_PRIORITY = 99999;
 
     /**

@@ -95,7 +95,7 @@ public class Preferences extends PreferenceActivity {
     public final static String GOOGLE_PLAY_DOWNLOADER = "org.doublecheck.wifiscanner";
 
     public static final String PUB_DOWNLOAD = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RouterKeygen_v3.dic";
-    public static final String VERSION = "3.15.0";
+    public static final String VERSION = "3.17.0";
     private static final String PUB_DIC_CFV = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RKDictionary.cfv";
     private static final String LAUNCH_DATE = "11/09/2015";
     private static final int DIALOG_ABOUT = 1001;
@@ -136,7 +136,7 @@ public class Preferences extends PreferenceActivity {
 
                         // Don't complain about dictionary size if user is on a
                         // wifi connection
-                        if ((((WifiManager) getBaseContext().getSystemService(
+                        if ((((WifiManager) getBaseContext().getApplicationContext().getSystemService(
                                 Context.WIFI_SERVICE))).getConnectionInfo()
                                 .getSSID() != null) {
                             try {

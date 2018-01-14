@@ -104,10 +104,8 @@ public class NetworksListActivity extends Activity implements
 
             // Checking for updates every week
             if (BuildConfig.APPLICATION_ID.equals("org.exobel.routerkeygen")) {
-                startService(new Intent(getApplicationContext(),
-                        UpdateCheckerService.class));
+                 startService(new Intent(getApplicationContext(), UpdateCheckerService.class));
             }
-//
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);

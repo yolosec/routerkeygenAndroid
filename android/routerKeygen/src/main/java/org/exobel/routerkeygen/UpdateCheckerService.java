@@ -5,8 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import org.exobel.routerkeygen.ui.Preferences;
 import org.json.JSONException;
@@ -19,9 +22,12 @@ import java.net.URL;
 
 public class UpdateCheckerService extends IntentService {
 
-    private final static String URL_DOWNLOAD = "https://raw.githubusercontent.com/routerkeygen/routerkeygenAndroid/master/android/routerkeygen_version.json";
+    private static final String TAG = "UpdateChecker";
+    private final static String URL_DOWNLOAD = "https://raw.githubusercontent.com/yolosec/routerkeygenAndroid/master/android/routerkeygen_version.json";
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
+
+    private static final boolean UPDATES_ENABLED = false;
     private final int UNIQUE_ID = R.string.app_name
             + UpdateCheckerService.class.getName().hashCode();
 
@@ -29,7 +35,11 @@ public class UpdateCheckerService extends IntentService {
         super("UpdateCheckerService");
     }
 
-    public static LastVersion getLatestVersion() {
+    public static LastVersion getLatestVersion(Context ctx) {
+        if (!UPDATES_ENABLED){
+            return getCurrentVersion(ctx);
+        }
+
         try {
             final JSONObject version = getRemoteObjectAsJson(new URL(
                     URL_DOWNLOAD));
@@ -42,6 +52,21 @@ public class UpdateCheckerService extends IntentService {
             return lV;
         } catch (JSONException | MalformedURLException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static LastVersion getCurrentVersion(Context ctx){
+        if (ctx == null){
+            return null;
+        }
+
+        try {
+            final PackageInfo pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+            return new LastVersion(pinfo.versionName, "");
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Exc in package load", e);
         }
         return null;
     }
@@ -80,7 +105,7 @@ public class UpdateCheckerService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        final LastVersion lastVersion = getLatestVersion();
+        final LastVersion lastVersion = getLatestVersion(this);
         if (lastVersion == null)
             return;
         if (!Preferences.VERSION.equals(lastVersion.version)) {
@@ -107,5 +132,13 @@ public class UpdateCheckerService extends IntentService {
     public static class LastVersion {
         public String version;
         public String url;
+
+        public LastVersion() {
+        }
+
+        public LastVersion(String version, String url) {
+            this.version = version;
+            this.url = url;
+        }
     }
 }

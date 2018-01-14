@@ -519,6 +519,7 @@ public class Preferences extends PreferenceActivity {
      * @return
      */
     protected OnPreferenceClickListener updateChecker(){
+        final Context ctx = this;
         return new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -527,8 +528,7 @@ public class Preferences extends PreferenceActivity {
                     }
 
                     protected Void doInBackground(Void... params) {
-                        lastVersion = UpdateCheckerService
-                                .getLatestVersion();
+                        lastVersion = UpdateCheckerService.getLatestVersion(ctx);
                         return null;
                     }
 

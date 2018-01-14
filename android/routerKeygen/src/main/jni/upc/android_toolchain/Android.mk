@@ -25,11 +25,11 @@ ifeq ($(MY_USE_STATIC_SSL),1)
 	LOCAL_LDLIBS += -lz
 else
 # Normal mainstream users mode
-	LOCAL_STATIC_LIBRARIES += crypto_ec_static
-	LOCAL_SHARED_LIBRARIES += libssl libcrypto
+	# LOCAL_STATIC_LIBRARIES += crypto_ec_static
+	# LOCAL_SHARED_LIBRARIES += libssl libcrypto
 endif
 
 
-LOCAL_STATIC_LIBRARIES += libgcc
+# LOCAL_STATIC_LIBRARIES += libgcc
 include $(BUILD_SHARED_LIBRARY)
 

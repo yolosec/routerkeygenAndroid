@@ -110,7 +110,7 @@ public class Wifi {
      * Connect to a configured network.
      *
      * @param ctx
-     * @param wifiManager
+     * @param wifiMgr
      * @param config
      * @param reassociate
      * @return

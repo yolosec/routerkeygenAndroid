@@ -106,12 +106,6 @@
         <Preference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:key="update"
-            android:title="@string/pref_update" />
-
-        <Preference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:key="changelog"
             android:title="@string/pref_changelog" />
 

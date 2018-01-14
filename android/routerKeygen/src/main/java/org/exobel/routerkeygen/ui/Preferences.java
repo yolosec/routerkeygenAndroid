@@ -157,56 +157,13 @@ public class Preferences extends PreferenceActivity {
                     }
                 });
 
-//        boolean app_installed = AdsUtils.checkDonation(this);
         final PreferenceCategory mCategory = (PreferenceCategory) findPreference("2section");
-        if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
-            mCategory.removePreference(findPreference("update"));
-        } else {
-            findPreference("update").setOnPreferenceClickListener(
-                    new OnPreferenceClickListener() {
-                        public boolean onPreferenceClick(Preference preference) {
-                            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                                protected void onPreExecute() {
-                                    showDialog(DIALOG_WAIT);
-                                }
+//        if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
+//            mCategory.removePreference(findPreference("update"));
+//        } else {
+//            findPreference("update").setOnPreferenceClickListener(updateChecker());
+//        }
 
-                                protected Void doInBackground(Void... params) {
-                                    lastVersion = UpdateCheckerService
-                                            .getLatestVersion();
-                                    return null;
-                                }
-
-                                protected void onPostExecute(Void result) {
-                                    removeDialog(DIALOG_WAIT);
-                                    if (isFinishing())
-                                        return;
-                                    if (lastVersion == null) {
-                                        showDialog(DIALOG_ERROR);
-                                        return;
-                                    }
-                                    if (!getVersion()
-                                            .equals(lastVersion.version)) {
-                                        showDialog(DIALOG_UPDATE_NEEDED);
-                                    } else {
-                                        Toast.makeText(Preferences.this,
-                                                R.string.msg_app_updated,
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            };
-                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-                                task.execute();
-                            } else {
-                                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                            // Checking for updates every week
-                            startService(new Intent(getApplicationContext(),
-                                    UpdateCheckerService.class));
-                            return true;
-                        }
-                    });
-        }
         findPreference("changelog").setOnPreferenceClickListener(
                 new OnPreferenceClickListener() {
                     public boolean onPreferenceClick(Preference preference) {
@@ -555,6 +512,56 @@ public class Preferences extends PreferenceActivity {
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
+    }
+
+    /**
+     * Old update checker
+     * @return
+     */
+    protected OnPreferenceClickListener updateChecker(){
+        return new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                    protected void onPreExecute() {
+                        showDialog(DIALOG_WAIT);
+                    }
+
+                    protected Void doInBackground(Void... params) {
+                        lastVersion = UpdateCheckerService
+                                .getLatestVersion();
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        removeDialog(DIALOG_WAIT);
+                        if (isFinishing())
+                            return;
+                        if (lastVersion == null) {
+                            showDialog(DIALOG_ERROR);
+                            return;
+                        }
+                        if (!getVersion()
+                                .equals(lastVersion.version)) {
+                            showDialog(DIALOG_UPDATE_NEEDED);
+                        } else {
+                            Toast.makeText(Preferences.this,
+                                    R.string.msg_app_updated,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                };
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    task.execute();
+                } else {
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                // Checking for updates every week
+                startService(new Intent(getApplicationContext(),
+                        UpdateCheckerService.class));
+                return true;
+            }
+        };
     }
 
     /**

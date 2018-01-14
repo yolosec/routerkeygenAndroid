@@ -177,5 +177,6 @@
          Use string with quotes if you want a space
     -->
     <string name="changelog_header_version">"Versione "</string>
+    <string name="pref_privacy_policy">Privacy policy</string>
 
 </resources>

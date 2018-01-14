@@ -29,7 +29,7 @@ public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
 
     private static final String[] SECURITY_MODES = {WEP, WPA, WPA2, WPA_EAP, IEEE8021X};
 
-    private static final String TAG = "ConfigurationSecuritiesOld";
+    private static final String TAG = "ConfigurationSecOld";
 
     private static boolean isHexWepKey(String wepKey) {
         final int len = wepKey.length();

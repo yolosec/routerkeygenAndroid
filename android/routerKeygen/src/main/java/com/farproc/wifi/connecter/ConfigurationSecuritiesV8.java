@@ -12,7 +12,7 @@ public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
     private static final int SECURITY_WEP = 1;
     private static final int SECURITY_PSK = 2;
     private static final int SECURITY_EAP = 3;
-    private static final String TAG = "ConfigurationSecuritiesV14";
+    private static final String TAG = "ConfigurationSecV14";
 
     private static int getSecurity(WifiConfiguration config) {
         if (config.allowedKeyManagement.get(KeyMgmt.WPA_PSK)) {

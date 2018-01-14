@@ -179,7 +179,7 @@
     -->
     <string name="changelog_row_bulletpoint" translatable="false">\u2022"</string>
     <string name="pref_privacy_policy">Privacy policy</string>
-    
+
     <!-- AUTOCOMPLETE SUPPORT -->
     <string-array name="supported_routers" translatable="false">
         <item>Alice-</item>

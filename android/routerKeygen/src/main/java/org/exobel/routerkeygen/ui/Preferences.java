@@ -31,6 +31,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -46,6 +48,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,9 +99,10 @@ public class Preferences extends PreferenceActivity {
 
     public static final String PRIVACY_POLICY_URL = "https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html";
     public static final String PUB_DOWNLOAD = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RouterKeygen_v3.dic";
-    public static final String VERSION = "3.17.0";
+    public static final String VERSION = "3.17.3";
     private static final String PUB_DIC_CFV = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RKDictionary.cfv";
     private static final String LAUNCH_DATE = "11/09/2015";
+    private static final String TAG = "Prefs";
     private static final int DIALOG_ABOUT = 1001;
     private static final int DIALOG_ASK_DOWNLOAD = 1002;
     private static final int DIALOG_WAIT = 1003;
@@ -107,6 +111,8 @@ public class Preferences extends PreferenceActivity {
     private static final int DIALOG_UPDATE_NEEDED = 1006;
     private static final int DIALOG_CHANGELOG = 1007;
     private LastVersion lastVersion;
+    private String currentVersion = null;
+    private Integer currentCode = null;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,49 +159,6 @@ public class Preferences extends PreferenceActivity {
 
 //        boolean app_installed = AdsUtils.checkDonation(this);
         final PreferenceCategory mCategory = (PreferenceCategory) findPreference("2section");
-//        if (!app_installed) {
-//            mCategory.removePreference(findPreference("analytics_enabled"));
-//            // If you haven't the donate app installed remove the paypal donate
-//            // link.
-//            mCategory.removePreference(findPreference("donate_paypal"));
-//            findPreference("donate_playstore").setOnPreferenceClickListener(
-//                    new OnPreferenceClickListener() {
-//                        public boolean onPreferenceClick(Preference preference) {
-//                            try {
-//                                startActivity(new Intent(Intent.ACTION_VIEW,
-//                                        Uri.parse("market://details?id="
-//                                                + GOOGLE_PLAY_DOWNLOADER)));
-//                            } catch (android.content.ActivityNotFoundException anfe) {
-//                                startActivity(new Intent(
-//                                        Intent.ACTION_VIEW,
-//                                        Uri.parse("http://play.google.com/store/apps/details?id="
-//                                                + GOOGLE_PLAY_DOWNLOADER)));
-//                            }
-//                            Toast.makeText(getApplicationContext(),
-//                                    R.string.msg_donation, Toast.LENGTH_LONG)
-//                                    .show();
-//                            return true;
-//                        }
-//                    });
-//        } else {
-//            // If you have the donate app installed no need to link to it.
-//            mCategory.removePreference(findPreference("donate_playstore"));
-//            if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
-//                //Play Store is quite restrictive nowadays
-//                mCategory.removePreference(findPreference("donate_paypal"));
-//            } else {
-//                findPreference("donate_paypal").setOnPreferenceClickListener(
-//                        new OnPreferenceClickListener() {
-//                            public boolean onPreferenceClick(Preference preference) {
-//                                final String donateLink = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V3FFBTRTTV5DN";
-//                                Uri uri = Uri.parse(donateLink);
-//                                startActivity(new Intent(Intent.ACTION_VIEW, uri));
-//
-//                                return true;
-//                            }
-//                        });
-//            }
-//        }
         if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
             mCategory.removePreference(findPreference("update"));
         } else {
@@ -221,7 +184,7 @@ public class Preferences extends PreferenceActivity {
                                         showDialog(DIALOG_ERROR);
                                         return;
                                     }
-                                    if (!Preferences.VERSION
+                                    if (!getVersion()
                                             .equals(lastVersion.version)) {
                                         showDialog(DIALOG_UPDATE_NEEDED);
                                     } else {
@@ -362,7 +325,7 @@ public class Preferences extends PreferenceActivity {
                 tspec1.setContent(R.id.text_about_scroll);
                 TextView text = ((TextView) layout.findViewById(R.id.text_about));
                 text.setMovementMethod(LinkMovementMethod.getInstance());
-                text.append(VERSION + "\n" + LAUNCH_DATE);
+                text.append(" " + getVersion() + "\n" + LAUNCH_DATE);
                 tabs.addTab(tspec1);
                 TabSpec tspec2 = tabs.newTabSpec("credits");
                 tspec2.setIndicator(getString(R.string.dialog_about_credits));
@@ -592,6 +555,28 @@ public class Preferences extends PreferenceActivity {
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
+    }
+
+    /**
+     * Returns the current version.
+     * @return
+     */
+    protected String getVersion(){
+        if (currentVersion != null){
+            return currentVersion;
+        }
+
+        try {
+            final PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            this.currentVersion = pinfo.versionName;
+            this.currentCode = pinfo.versionCode;
+            return this.currentVersion;
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Exc in package load", e);
+        }
+
+        return VERSION;
     }
 
 }

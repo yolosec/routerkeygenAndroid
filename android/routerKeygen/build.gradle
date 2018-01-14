@@ -3,8 +3,9 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    flavorDimensions 'default'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -14,7 +15,7 @@ android {
     defaultConfig {
         applicationId "org.exobel.routerkeygen"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 26
 
     }
 
@@ -103,6 +104,6 @@ def getNdkBuildCmd() {
 
 dependencies {
     compile project(':aFileChooser')
-    compile 'com.android.support:support-v4:23.1.0'
+    compile 'com.android.support:support-v4:22.2.1'
     testCompile 'junit:junit:4.12'
 }

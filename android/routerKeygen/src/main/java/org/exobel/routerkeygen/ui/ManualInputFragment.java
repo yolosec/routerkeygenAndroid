@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,7 +252,7 @@ public class ManualInputFragment extends Fragment {
             try {
                 magicInfo.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("MacInputFragment", "Mac Error", e);
             }
             return wifi;
         }

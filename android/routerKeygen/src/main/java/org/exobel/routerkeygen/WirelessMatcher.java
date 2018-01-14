@@ -1,5 +1,7 @@
 package org.exobel.routerkeygen;
 
+import android.util.Log;
+
 import org.exobel.routerkeygen.algorithms.AlcatelLucentKeygen;
 import org.exobel.routerkeygen.algorithms.AliceGermanyKeygen;
 import org.exobel.routerkeygen.algorithms.AliceItalyKeygen;
@@ -69,6 +71,7 @@ import java.util.zip.ZipInputStream;
 
 public class WirelessMatcher {
 
+    private static final String TAG = "WirelessMatcher";
     private static Map<String, ArrayList<AliceMagicInfo>> supportedAlices = null;
     private static Map<String, ArrayList<TeleTuMagicInfo>> supportedTeletu = null;
     private static Map<String, ArrayList<CytaMagicInfo>> supportedCytaZTEs = null;
@@ -529,7 +532,7 @@ public class WirelessMatcher {
                 entry = magicInfo.getNextEntry();
             } while (entry != null && !filename.equals(entry.getName()));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         }
         if (entry != null)
             return magicInfo;

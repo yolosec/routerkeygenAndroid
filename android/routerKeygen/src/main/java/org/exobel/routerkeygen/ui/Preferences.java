@@ -283,7 +283,7 @@ public class Preferences extends PreferenceActivity {
                         try {
                             checkCurrentDictionary();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Log.e(TAG, "Dict error", e);
                         }
                     }
                 };
@@ -592,7 +592,7 @@ public class Preferences extends PreferenceActivity {
             try {
                 checkCurrentDictionary();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Dict error", e);
             }
         } else
             showDialog(DIALOG_ASK_DOWNLOAD);

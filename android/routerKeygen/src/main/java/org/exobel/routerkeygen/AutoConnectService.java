@@ -255,7 +255,6 @@ public class AutoConnectService extends Service implements onConnectionListener 
                 cancelNotification = true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             Log.e(AutoConnectService.class.getSimpleName(), "Error during connection", e);
         }
         if (currentNetworkId == -1) {
@@ -282,7 +281,7 @@ public class AutoConnectService extends Service implements onConnectionListener 
                 unregisterReceiver(mReceiver);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         }
     }
 

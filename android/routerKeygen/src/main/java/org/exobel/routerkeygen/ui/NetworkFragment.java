@@ -220,7 +220,7 @@ public class NetworkFragment extends Fragment {
 			try {
 				zipInputStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Zip stream error", e);
 			}
 		}
 	}

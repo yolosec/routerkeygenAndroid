@@ -20,6 +20,7 @@ package org.exobel.routerkeygen.algorithms;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.exobel.routerkeygen.R;
 import org.exobel.routerkeygen.ui.Preferences;
@@ -59,7 +60,8 @@ public class ThomsonKeygen extends Keygen {
 			'6', '7', '8', '9', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'A', 'B', 'C', 'D', 'E', 'F', '0', '1', '2', '3', '4', '5', '6',
 			'7', '8', '9', 'A',};
-	final private byte[] cp = new byte[12];
+    private static final String TAG = "ThomsonKeygen";
+    final private byte[] cp = new byte[12];
 	final private byte[] table = new byte[1282];
 	final private byte[] routerESSID = new byte[3];
 	final private String ssidIdentifier;
@@ -381,7 +383,7 @@ public class ThomsonKeygen extends Keygen {
 					addPassword(StringUtils.getHexString(hash).substring(0, 10)
 							.toUpperCase(Locale.getDefault()));
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					Log.e(TAG, "Exception", e);
 				}
 			}
 		}
@@ -425,7 +427,7 @@ public class ThomsonKeygen extends Keygen {
 				addPassword(StringUtils.getHexString(hash).substring(0, 10)
 						.toUpperCase(Locale.getDefault()));
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Exception", e);
 			}
 		}
 	}
@@ -465,7 +467,7 @@ public class ThomsonKeygen extends Keygen {
 				addPassword(StringUtils.getHexString(hash).substring(0, 10)
 						.toUpperCase(Locale.getDefault()));
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Exception", e);
 			}
 		}
 	}

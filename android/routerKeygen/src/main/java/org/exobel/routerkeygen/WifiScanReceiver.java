@@ -28,6 +28,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.exobel.routerkeygen.algorithms.WiFiNetwork;
@@ -40,6 +41,7 @@ import java.util.TreeSet;
 import java.util.zip.ZipInputStream;
 
 public class WifiScanReceiver extends BroadcastReceiver {
+    private static final String TAG = "WifiScanReceiver";
     final private OnScanListener[] scanListeners;
     final private WifiManager wifi;
     private KeygenMatcherTask task;
@@ -68,7 +70,7 @@ public class WifiScanReceiver extends BroadcastReceiver {
                 // Single scan
                 context.unregisterReceiver(this);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "Exception", e);
             }
             if (task == null || task.getStatus() == Status.FINISHED) {
                 task = new KeygenMatcherTask(results, context);
@@ -121,7 +123,7 @@ public class WifiScanReceiver extends BroadcastReceiver {
                 } catch (LinkageError e) {
                     misbuiltAPK = true;
                 } catch (NotFoundException | IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Exception", e);
                 }
             }
 

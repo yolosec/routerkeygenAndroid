@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.exobel.routerkeygen.ui.Preferences;
@@ -34,6 +35,7 @@ public class DictionaryDownloadService extends IntentService {
             0x2c, (byte) 0xb2, (byte) 0xe8, (byte) 0xda, (byte) 0x13,
             (byte) 0xc2, (byte) 0xd8, (byte) 0xc7, (byte) 0xbb, (byte) 0x08,
             0x2c, (byte) 0xc2, (byte) 0x1f, (byte) 0xe6};
+    private static final String TAG = "DictDownloadSvc";
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
     private final int UNIQUE_ID = R.string.app_name
@@ -227,7 +229,7 @@ public class DictionaryDownloadService extends IntentService {
                             getString(R.string.msg_error),
                             getString(R.string.msg_nosdcard)).build());
             cancelNotification = false;
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         } catch (Exception e) {
             new File(dicTemp).delete();
             mNotificationManager.notify(
@@ -236,19 +238,19 @@ public class DictionaryDownloadService extends IntentService {
                             getString(R.string.msg_error),
                             getString(R.string.msg_err_unkown)).build());
             cancelNotification = false;
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         } finally {
             if (fos != null)
                 try {
                     fos.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Exception", e);
                 }
             if (dis != null)
                 try {
                     dis.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Exception", e);
                 }
             if (con != null)
                 con.disconnect();
@@ -266,7 +268,7 @@ public class DictionaryDownloadService extends IntentService {
             file.delete();
             return !ret;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         }
         return true;
     }

@@ -42,6 +42,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -69,6 +70,8 @@ import org.exobel.routerkeygen.algorithms.WiFiNetwork;
 
 public class NetworksListActivity extends Activity implements
         NetworksListFragment.OnItemSelectionListener, OnScanListener {
+
+    private static final String TAG = "NetworksListActivity";
     private final static String LAST_DIALOG_TIME = "last_time";
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 1;
@@ -260,7 +263,7 @@ public class NetworksListActivity extends Activity implements
         try {
             mHandler.removeCallbacks(mAutoScanTask);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         }
     }
 
@@ -270,13 +273,13 @@ public class NetworksListActivity extends Activity implements
         try {
             unregisterReceiver(scanFinished);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unregister error", e);
         }
 
         try {
             unregisterReceiver(stateChanged);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unregister error", e);
         }
     }
 

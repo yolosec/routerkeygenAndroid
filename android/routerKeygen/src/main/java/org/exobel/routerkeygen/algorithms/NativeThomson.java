@@ -20,6 +20,7 @@ package org.exobel.routerkeygen.algorithms;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.exobel.routerkeygen.R;
 
@@ -99,7 +100,7 @@ public class NativeThomson extends Keygen {
             try {
                 t.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("NaiveThomson", "Exception", e);
                 continue;
             }
             final String[] results = t.results;

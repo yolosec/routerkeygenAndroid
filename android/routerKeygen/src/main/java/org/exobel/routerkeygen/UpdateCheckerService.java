@@ -51,7 +51,7 @@ public class UpdateCheckerService extends IntentService {
             lV.url = version.getString("url");
             return lV;
         } catch (JSONException | MalformedURLException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
         }
         return null;
     }
@@ -89,14 +89,14 @@ public class UpdateCheckerService extends IntentService {
 
             return new JSONObject(jsonAsString);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Exception", e);
             return null;
         } finally {
             if (inputStream != null)
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Exception", e);
                 }
         }
 

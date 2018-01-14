@@ -59,7 +59,7 @@ public class CancelOperationActivity extends Activity {
                                     Class.forName(getIntent().getStringExtra(
                                             SERVICE_TO_TERMINATE))));
                         } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
+                            Log.e(TAG, "Exception", e);
                         }
 
                         finish();

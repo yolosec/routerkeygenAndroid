@@ -105,7 +105,7 @@ public class Preferences extends PreferenceActivity {
     public static final String PUB_DOWNLOAD = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RouterKeygen_v3.dic";
     public static final String VERSION = "3.17.3";
     private static final String PUB_DIC_CFV = "https://github.com/routerkeygen/thomsonDicGenerator/releases/download/v3/RKDictionary.cfv";
-    private static final String LAUNCH_DATE = "11/09/2015";
+    private static final String LAUNCH_DATE = "15 Jan 2018";
     private static final String TAG = "Prefs";
     private static final int DIALOG_ABOUT = 1001;
     private static final int DIALOG_ASK_DOWNLOAD = 1002;

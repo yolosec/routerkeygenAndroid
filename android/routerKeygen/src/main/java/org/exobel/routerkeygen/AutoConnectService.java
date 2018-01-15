@@ -340,8 +340,11 @@ public class AutoConnectService extends Service implements onConnectionListener 
     @Override
     public void onFourWayHandshake(int supplicantError){
         handshakeAttempt.set(attempts);
+
         Log.d(AutoConnectManager.class.getSimpleName(),
-                String.format("4Way handshake - Trying %s, error: %s", keys.get(attempts), supplicantError));
+                String.format("4Way handshake - Trying %s, error: %s",
+                        keys.size() <= attempts ? "N/A" : keys.get(attempts),
+                        supplicantError));
     }
 
     @Override
@@ -400,7 +403,8 @@ public class AutoConnectService extends Service implements onConnectionListener 
                         this,
                         getString(R.string.app_name),
                         getString(R.string.not_correct_key_testing,
-                                keys.get(attempts))).build());
+                                keys.size() <= attempts ? "N/A" : keys.get(attempts)
+                        )).build());
         cancelNotification = false;
         stopSelf();
     }

@@ -225,12 +225,7 @@ public class NetworksListFragment extends Fragment implements
     }
 
     public void updatePermission(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
+        if (NetworksListActivity.isLocationAllowed(activity)) {
             scanPermission = false;
         } else {
             scanPermission = true;
@@ -283,15 +278,7 @@ public class NetworksListFragment extends Fragment implements
     }
 
     protected void onPermissionClicked(){
-        final Intent intent = new Intent(
-                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.parse("package:" + BuildConfig.APPLICATION_ID)
-        );
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        startActivity(intent);
+        NetworksListActivity.openAppAndroidSettings(getActivity());
     }
 
     protected void onRequestPermissionClicked(){

@@ -68,6 +68,8 @@ import org.exobel.routerkeygen.WifiStateReceiver;
 import org.exobel.routerkeygen.algorithms.Keygen;
 import org.exobel.routerkeygen.algorithms.WiFiNetwork;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class NetworksListActivity extends Activity implements
         NetworksListFragment.OnItemSelectionListener, OnScanListener {
 
@@ -87,6 +89,8 @@ public class NetworksListActivity extends Activity implements
     private boolean wifiState;
     private boolean wifiOn;
     private boolean scanPermission = true;
+    private AtomicInteger permissionRequest = new AtomicInteger();
+    private AtomicInteger permissionResponse = new AtomicInteger();
     private boolean autoScan;
     private boolean analyticsOptIn;
     private long autoScanInterval;
@@ -146,6 +150,9 @@ public class NetworksListActivity extends Activity implements
                 }
         );
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+
+        permissionRequest.set(0);
+        permissionResponse.set(0);
     }
 
     @Override
@@ -227,20 +234,13 @@ public class NetworksListActivity extends Activity implements
     public void onResume() {
         super.onResume();
         getPrefs();
+        scanPermission = false;
 
         // Here, thisActivity is the current activity
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
+        if (isLocationAllowed(this))
         {
-            scanPermission = false;
-
             // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+            askForLocationPermission();
 
             // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
             // app-defined int constant. The callback method gets the
@@ -298,18 +298,60 @@ public class NetworksListActivity extends Activity implements
             case MY_PERMISSIONS_ACCESS_COARSE_LOCATION:
             {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    scanPermission = true;
-                    networkListFragment.updatePermission(this);
-                    scan();
+                permissionResponse.getAndIncrement();
+                if (grantResults.length > 0){
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        scanPermission = true;
+                        networkListFragment.updatePermission(this);
+                        scan();
+
+                    } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                        scanPermission = false;
+                        networkListFragment.updatePermission(this);
+
+                    } else {
+                        Log.e(TAG, "Wtf grant result");
+                    }
                 }
             }
         }
     }
 
     public void requestLocationPermissions(){
-        settingsRequest(this, o -> startScan());
+        permissionRequest.set(0);
+        permissionResponse.set(0);
+        askForLocationPermission();
+    }
+
+    public static void openAppAndroidSettings(Context ctx){
+        final Intent intent = new Intent(
+                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        );
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        ctx.startActivity(intent);
+    }
+
+    public static boolean isLocationAllowed(Context ctx){
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED;
+    }
+
+    public boolean askForLocationPermission(){
+        if (permissionRequest.getAndIncrement() == 0) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+            return true;
+        }
+
+        return false;
     }
 
     public static void settingsRequest(final Activity activity, OnSuccessListener cb) {
@@ -349,7 +391,6 @@ public class NetworksListActivity extends Activity implements
             }
         });
     }
-
 
     private void scan() {
         if (!wifiState && !wifiOn) {

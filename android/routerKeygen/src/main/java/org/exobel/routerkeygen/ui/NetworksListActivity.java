@@ -73,6 +73,7 @@ public class NetworksListActivity extends Activity implements
 
     private static final String TAG = "NetworksListActivity";
     private final static String LAST_DIALOG_TIME = "last_time";
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 2;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 1;
     private boolean mTwoPane;
@@ -228,15 +229,18 @@ public class NetworksListActivity extends Activity implements
         getPrefs();
 
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
             scanPermission = false;
 
             // No explanation needed, we can request the permission.
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
 
             // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
             // app-defined int constant. The callback method gets the
@@ -245,16 +249,20 @@ public class NetworksListActivity extends Activity implements
         } else {
             scanPermission = true;
         }
+
         if (!scanPermission) {
             networkListFragment.setMessage(R.string.msg_nolocationpermission);
             return;
         }
+
         scan();
+
         if (autoScan && scanPermission) {
             mHandler.removeCallbacks(mAutoScanTask);
             mHandler.postDelayed(mAutoScanTask, autoScanInterval * 1000L);
-        } else
+        } else {
             mHandler.removeCallbacks(mAutoScanTask);
+        }
     }
 
     @Override
@@ -286,7 +294,9 @@ public class NetworksListActivity extends Activity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
+            case MY_PERMISSIONS_ACCESS_FINE_LOCATION:
+            case MY_PERMISSIONS_ACCESS_COARSE_LOCATION:
+            {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

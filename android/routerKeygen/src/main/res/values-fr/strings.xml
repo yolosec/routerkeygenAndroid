@@ -192,6 +192,8 @@
     <string name="open_app_settings">Ouvrir les paramètres de l\'application</string>
     <string name="msg_nolocationpermission">Aucune autorisation pour scanner le réseau. Veuillez activer l\'autorisation de localisation.</string>
     <string name="pref_privacy_policy">Privacy policy</string>
+    <string name="request_permissions">Request permissions</string>
+    <string name="request_permissions_fail">Error in permission request, please try again later or restart the app.</string>
     <!--UNTRANSLATED-->
 
 </resources>

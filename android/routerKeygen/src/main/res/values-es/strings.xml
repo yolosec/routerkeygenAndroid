@@ -175,6 +175,8 @@
     <string name="pref_privacy_policy">Privacy policy</string>
     <string name="msg_nolocationpermission">Sin permiso para escanear la red. Por favor habilite el permiso de ubicación.</string>
     <string name="open_app_settings">Abra la configuración de la aplicación</string>
+    <string name="request_permissions">Request permissions</string>
+    <string name="request_permissions_fail">Error in permission request, please try again later or restart the app.</string>
     <!--UNTRANSLATED-->
 
 </resources>

@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -55,6 +56,7 @@ import org.exobel.routerkeygen.algorithms.WiFiNetwork;
 public class NetworksListFragment extends Fragment implements
         OnScanListener, OnItemClickListener, MessagePublisher {
 
+    private static final String TAG = "NetworksListFrag";
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private static final String NETWORKS_FOUND = "network_found";
     private static final String MENU_VALUE = "menu_value";
@@ -70,6 +72,7 @@ public class NetworksListFragment extends Fragment implements
     private int mActivatedPosition = ListView.INVALID_POSITION;
     private ListView listview;
     private Button permissionButton;
+    private Button requestPermButton;
     private WifiListAdapter wifiListAdapter;
     private View noNetworksMessage;
     private WiFiNetwork[] networksFound;
@@ -84,8 +87,13 @@ public class NetworksListFragment extends Fragment implements
         RelativeLayout root = (RelativeLayout) inflater.inflate(
                 R.layout.fragment_networks_list, container, false);
         listview = root.findViewById(R.id.networks_list);
+
         permissionButton = root.findViewById(R.id.permissions);
-        permissionButton.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID))));
+        permissionButton.setOnClickListener(v -> onPermissionClicked());
+
+        requestPermButton = root.findViewById(R.id.request_permissions);
+        requestPermButton.setOnClickListener(v -> onRequestPermissionClicked());
+
         wifiListAdapter = new WifiListAdapter(getActivity());
         listview.setAdapter(wifiListAdapter);
         noNetworksMessage = root.findViewById(R.id.message_group);
@@ -212,6 +220,7 @@ public class NetworksListFragment extends Fragment implements
         noNetworksMessage.setVisibility(View.VISIBLE);
         if (message == R.string.msg_nolocationpermission) {
             permissionButton.setVisibility(View.VISIBLE);
+            requestPermButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -230,6 +239,7 @@ public class NetworksListFragment extends Fragment implements
         if (networksFound == null && scanPermission && noNetworksMessage != null) {
             noNetworksMessage.setVisibility(View.GONE);
             permissionButton.setVisibility(View.GONE);
+            requestPermButton.setVisibility(View.GONE);
             noNetworksMessage.findViewById(R.id.loading_spinner).setVisibility(View.VISIBLE);
         }
     }
@@ -242,6 +252,7 @@ public class NetworksListFragment extends Fragment implements
         if (networks.length > 0) {
             noNetworksMessage.setVisibility(View.GONE);
             permissionButton.setVisibility(View.GONE);
+            requestPermButton.setVisibility(View.GONE);
             wifiListAdapter.updateNetworks(networks);
             listview.setVisibility(View.VISIBLE);
         } else {
@@ -254,6 +265,7 @@ public class NetworksListFragment extends Fragment implements
                 messageView.setText(R.string.msg_nowifidetected);
             } else {
                 permissionButton.setVisibility(View.VISIBLE);
+                requestPermButton.setVisibility(View.VISIBLE);
                 messageView.setText(R.string.msg_nolocationpermission);
             }
             noNetworksMessage.setVisibility(View.VISIBLE);
@@ -267,6 +279,31 @@ public class NetworksListFragment extends Fragment implements
             final WiFiNetwork wifiNetwork = wifiListAdapter.getItem(position).wifiNetwork;
             if (wifiNetwork != null) // the list is unstable and it can happen
                 mCallbacks.onItemSelected(wifiNetwork);
+        }
+    }
+
+    protected void onPermissionClicked(){
+        final Intent intent = new Intent(
+                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        );
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity(intent);
+    }
+
+    protected void onRequestPermissionClicked(){
+        try{
+            final NetworksListActivity act = (NetworksListActivity) getActivity();
+            act.requestLocationPermissions();
+
+        } catch (Exception e){
+            Log.e(TAG, "Exception on requesting location permissions", e);
+            Toast.makeText(getActivity(),
+                    R.string.request_permissions_fail,
+                    Toast.LENGTH_LONG).show();
         }
     }
 

@@ -308,6 +308,10 @@ public class NetworksListActivity extends Activity implements
         }
     }
 
+    public void requestLocationPermissions(){
+        settingsRequest(this, o -> startScan());
+    }
+
     public static void settingsRequest(final Activity activity, OnSuccessListener cb) {
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(100000);

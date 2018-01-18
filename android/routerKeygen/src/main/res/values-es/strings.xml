@@ -177,6 +177,7 @@
     <string name="open_app_settings">Abra la configuración de la aplicación</string>
     <string name="request_permissions">Request permissions</string>
     <string name="request_permissions_fail">Error in permission request, please try again later or restart the app.</string>
+    <string name="android_settings">Application settings</string>
     <!--UNTRANSLATED-->
 
 </resources>

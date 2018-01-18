@@ -130,11 +130,15 @@ public class Preferences extends PreferenceActivity {
                 preference -> fetchDictionary());
 
         final PreferenceCategory mCategory = (PreferenceCategory) findPreference("2section");
-//        if (BuildConfig.APPLICATION_ID.equals("io.github.routerkeygen")) {
-//            mCategory.removePreference(findPreference("update"));
-//        } else {
-//            findPreference("update").setOnPreferenceClickListener(updateChecker());
-//        }
+        final Context ctx = this;
+
+        findPreference("android_settings").setOnPreferenceClickListener(
+                new OnPreferenceClickListener() {
+                    public boolean onPreferenceClick(Preference preference) {
+                        NetworksListActivity.openAppAndroidSettings(ctx);
+                        return true;
+                    }
+                });
 
         findPreference("changelog").setOnPreferenceClickListener(
                 new OnPreferenceClickListener() {

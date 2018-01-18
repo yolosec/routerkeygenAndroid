@@ -45,6 +45,14 @@
             android:summaryOff="@string/pref_hintoff_autoscan"
             android:summaryOn="@string/pref_hinton_autoscan"
             android:title="@string/pref_autoscan" />
+
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:key="android_settings"
+            android:title="@string/android_settings"
+            android:summary="@string/android_settings_desc"
+            />
     </PreferenceCategory>
 
     <com.robobunny.SeekBarPreference

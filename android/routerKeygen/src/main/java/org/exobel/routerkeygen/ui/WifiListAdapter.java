@@ -203,10 +203,9 @@ public class WifiListAdapter extends BaseAdapter implements
                 holder.mac.setText(wifi.wifiNetwork.getMacAddress());
                 final int strenght = wifi.wifiNetwork.getLevel();
                 if (wifi.wifiNetwork.isLocked()) {
-                    holder.networkStrength
-                            .setImageDrawable(wifiSignalLocked[strenght]);
+                    holder.networkStrength.setImageDrawable(getWifiSignalLocked(strenght));
                 } else {
-                    holder.networkStrength.setImageDrawable(wifiSignal[strenght]);
+                    holder.networkStrength.setImageDrawable(getWifiSignal(strenght));
                 }
             }
         } else {
@@ -215,6 +214,24 @@ public class WifiListAdapter extends BaseAdapter implements
             view.setBackgroundColor(parent.getResources().getColor(wifi.color));
         }
         return convertView;
+    }
+
+    /**
+     * Protected wifiSignalLocked
+     * @param strenght
+     * @return
+     */
+    protected Drawable getWifiSignalLocked(int strenght){
+        return wifiSignalLocked[Math.max(0, Math.min(strenght, wifiSignalLocked.length - 1))];
+    }
+
+    /**
+     * Protected getWifiSignal
+     * @param strenght
+     * @return
+     */
+    protected Drawable getWifiSignal(int strenght){
+        return wifiSignal[Math.max(0, Math.min(strenght, wifiSignal.length - 1))];
     }
 
     @Override

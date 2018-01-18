@@ -178,6 +178,7 @@
     <string name="request_permissions">Request permissions</string>
     <string name="request_permissions_fail">Error in permission request, please try again later or restart the app.</string>
     <string name="android_settings">Application settings</string>
+    <string name="android_settings_desc">Android application settings (permissions, etc.)</string>
     <!--UNTRANSLATED-->
 
 </resources>

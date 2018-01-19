@@ -38,7 +38,7 @@ public class WiFiNetwork implements Comparable<WiFiNetwork>, Parcelable {
 	final private int frequency;
 	final private String encryption;
 	private ScanResult scanResult;
-	private ArrayList<Keygen> keygens;
+	private ArrayList<Keygen> keygens = new ArrayList<>();
 
 	public WiFiNetwork(ScanResult scanResult, ZipInputStream magicInfo) {
 		this(scanResult.SSID, scanResult.BSSID,

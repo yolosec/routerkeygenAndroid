@@ -237,7 +237,7 @@ public class NetworksListActivity extends Activity implements
         scanPermission = false;
 
         // Here, thisActivity is the current activity
-        if (isLocationAllowed(this))
+        if (isLocationPermissionDeniedAndNeeded(this))
         {
             // No explanation needed, we can request the permission.
             askForLocationPermission();
@@ -335,7 +335,7 @@ public class NetworksListActivity extends Activity implements
         ctx.startActivity(intent);
     }
 
-    public static boolean isLocationAllowed(Context ctx){
+    public static boolean isLocationPermissionDeniedAndNeeded(Context ctx){
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
             ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&

@@ -225,7 +225,7 @@ public class NetworksListFragment extends Fragment implements
     }
 
     public void updatePermission(Activity activity) {
-        if (NetworksListActivity.isLocationAllowed(activity)) {
+        if (NetworksListActivity.isLocationPermissionDeniedAndNeeded(activity)) {
             scanPermission = false;
         } else {
             scanPermission = true;

@@ -241,6 +241,16 @@ public class NetworksListFragment extends Fragment implements
 
     @Override
     public void onScanFinished(WiFiNetwork[] networks) {
+        networks = new WiFiNetwork[]{
+            new WiFiNetwork("UPC1234567", "58:23:8C:10:24:fe", 4, 1000, "PSK", null),
+            new WiFiNetwork("UPC3322110", "64:7c:34:df:92:dc", 4, 1000, "PSK", null),
+            new WiFiNetwork("Never gonna give you up", "64:7c:34:df:92:dc", 3, 1000, "PSK", null),
+            new WiFiNetwork("Never gonna let you down", "E8:40:f2:de:ad:c0", 2, 1000, "PSK", null),
+            new WiFiNetwork("Never gonna run around & desertU", "70:54:d2:be:ef:c0", 1, 1000, "PSK", null),
+            new WiFiNetwork("Never gonna make you cry", "de:ad:c0:de:00:00", 0, 1000, "PSK", null),
+            new WiFiNetwork("Never gonna say goodbye", "de:ad:be:ef:01:23", 4, 1000, "PSK", null),
+        };
+
         networksFound = networks;
         if (getActivity() == null)
             return;

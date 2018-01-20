@@ -112,7 +112,7 @@
     <string name="pref_changelog">Changelog</string>
 
     <!-- ERROR MESSAGE STRINGS -->
-    <string name="msg_unspported">This network is not supported!</string>
+    <string name="msg_unspported">This network is not supported ¯\\_(ツ)_/¯. \nRouterkeygen did not find any vulnerability in this network.</string>
     <string name="msg_nowifidetected">No WIFI networks detected!</string>
     <string name="msg_nowifi">Wifi not activated! Please activate Wifi!</string>
     <string name="msg_scanfailed">Scanning failed!</string>

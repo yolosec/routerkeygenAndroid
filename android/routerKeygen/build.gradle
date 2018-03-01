@@ -10,7 +10,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
-        applicationId "org.exobel.routerkeygen"
+        applicationId 'org.exobel.routerkeygen'
         versionCode 72
         versionName "4.1.5"
         minSdkVersion 16
@@ -25,11 +25,11 @@ android {
     }
     productFlavors {
         noGapps {
-            applicationId "net.yolosec.routerkeygen2"
+            applicationId 'net.yolosec.routerkeygen2'
             gapps = false
         }
         yolosec2 {
-            applicationId "net.yolosec.routerkeygen2"
+            applicationId 'net.yolosec.routerkeygen2'
             gapps = true
         }
     }
@@ -74,15 +74,15 @@ def getNdkDir() {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     def ndkDir = properties.getProperty('ndk.dir', null)
     if (ndkDir == null)
-        throw new GradleException("NDK location not found. Define location with ndk.dir in the local.properties file or with an ANDROID_NDK_ROOT environment variable.")
+        throw new GradleException('NDK location not found. Define location with ndk.dir in the local.properties file or with an ANDROID_NDK_ROOT environment variable.')
 
     return ndkDir
 }
 
 def getNdkBuildCmd() {
-    def ndkBuild = getNdkDir() + File.separator + "ndk-build"
+    def ndkBuild = getNdkDir() + File.separator + 'ndk-build'
     if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-        ndkBuild += ".cmd"
+        ndkBuild += '.cmd'
     }
 
     return ndkBuild

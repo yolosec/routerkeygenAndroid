@@ -4,6 +4,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     flavorDimensions 'default'
+    project.ext.set('gapps', true)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -23,17 +24,13 @@ android {
         }
     }
     productFlavors {
-        github {
-            applicationId "org.exobel.routerkeygen"
-        }
-        googleplay {
-            applicationId "io.github.routerkeygen"
-        }
-        yolosec {
-            applicationId "net.yolosec.routerkeygen"
+        noGapps {
+            applicationId "net.yolosec.routerkeygen2"
+            gapps = false
         }
         yolosec2 {
             applicationId "net.yolosec.routerkeygen2"
+            gapps = true
         }
     }
     sourceSets.main {
@@ -98,8 +95,12 @@ dependencies {
     implementation 'com.android.support:support-core-ui:27.0.1'
     implementation 'com.android.support:support-core-utils:27.0.1'
     implementation 'com.android.support:support-fragment:27.0.1'
-    implementation('com.google.android.gms:play-services-location:11.6.0', {
-        exclude module: 'support-v4'
-    })
+
+    if (gapps) {
+        implementation('com.google.android.gms:play-services-location:11.6.0', {
+            exclude module: 'support-v4'
+        })
+    }
+
     testImplementation 'junit:junit:4.12'
 }

@@ -47,18 +47,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
 import org.exobel.routerkeygen.BuildConfig;
 import org.exobel.routerkeygen.R;
 import org.exobel.routerkeygen.UpdateCheckerService;
@@ -77,7 +65,7 @@ public class NetworksListActivity extends Activity implements
     private final static String LAST_DIALOG_TIME = "last_time";
     private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 2;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1;
-    private static final int REQUEST_CHECK_SETTINGS = 1;
+    public static final int REQUEST_CHECK_SETTINGS = 1;
     private boolean mTwoPane;
     private NetworksListFragment networkListFragment;
     private WifiManager wifi;
@@ -354,44 +342,6 @@ public class NetworksListActivity extends Activity implements
         return false;
     }
 
-    public static void settingsRequest(final Activity activity, OnSuccessListener cb) {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(100000);
-        mLocationRequest.setFastestInterval(50000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest);
-        builder.setAlwaysShow(true);
-
-        SettingsClient client = LocationServices.getSettingsClient(activity);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(activity, cb);
-
-        task.addOnFailureListener(activity, e -> {
-            int statusCode = ((ApiException) e).getStatusCode();
-            switch (statusCode) {
-                case CommonStatusCodes.RESOLUTION_REQUIRED:
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
-                    } catch (IntentSender.SendIntentException sendEx) {
-                        // Ignore the error.
-                    }
-                    break;
-                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                    // Location settings are not satisfied. However, we have no way
-                    // to fix the settings so we won't show the dialog.
-                    break;
-            }
-        });
-    }
-
     private void scan() {
         if (!wifiState && !wifiOn) {
             networkListFragment.setMessage(R.string.msg_nowifi);
@@ -409,7 +359,7 @@ public class NetworksListActivity extends Activity implements
                     .show();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                settingsRequest(this, o -> startScan());
+                LocationWrapper.settingsRequest(this, this::startScan);
             } else {
                 startScan();
             }

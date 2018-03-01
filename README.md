@@ -1,7 +1,10 @@
 # RouterKeygen for Android
 
-This fork is also available on GooglePlay
+This fork is also available on GooglePlay:
+
 https://play.google.com/store/apps/details?id=net.yolosec.routerkeygen2
+
+## Supported devices
 
 Router Keygen generate default WPA/WEP keys for the following router:
 
@@ -40,11 +43,11 @@ Router Keygen is open-source licensed under [GPL](http://www.gnu.org/copyleft/gp
 
 # Releases
 
-Get them from here:
-https://github.com/routerkeygen/routerkeygenAndroid/releases
+For the latest release please refer to the original [Google Play] distribution channel.
+We also provide APKs on the following link: 
+- https://github.com/yolosec/routerkeygenAndroid/releases
 
-Or this fork:
-https://github.com/yolosec/routerkeygenAndroid/releases
+The no-google-play-services version was added as 'noGapps' variant.
 
 # Source
 This application is Routerkeygen derivate with UPC router support added. 
@@ -63,3 +66,7 @@ also takes the credit. This app was published to make it ASAP to the production 
 - App does not collect any user related data. It does not upload anything to the internet.
 
 https://yolosec.github.io/routerkeygenAndroid/privacy_policy.html
+
+
+[Google Play]: https://play.google.com/store/apps/details?id=net.yolosec.routerkeygen2
+

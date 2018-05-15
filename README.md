@@ -1,8 +1,9 @@
 # RouterKeygen for Android
 
-This fork is also available on GooglePlay:
+This fork is also available on Google Play and F-Droid:
 
-https://play.google.com/store/apps/details?id=net.yolosec.routerkeygen2
+* https://play.google.com/store/apps/details?id=net.yolosec.routerkeygen2
+* https://f-droid.org/packages/net.yolosec.routerkeygen2/
 
 ## Supported devices
 

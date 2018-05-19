@@ -50,6 +50,21 @@ We also provide APKs on the following link:
 
 The no-google-play-services version was added as 'noGapps' variant.
 
+# Location Permission
+Location privilege is required by Android 6+ in order to allow app scan for WiFis.
+The reason is the WiFi scan leaks user location (by WiFi MAC maps) so Android won't allow Routerkeygen Yolosec to scan WiFis without you granting location privilege for the app.
+
+Please note we don't use your GPS (feel free to verify that in our source codes) nor send any data anywhere.
+
+Read more "Access to Hardware Identifier" in : 
+
+https://developer.android.com/about/versions/marshmallow/android-6.0-changes
+
+Resources:
+
+- https://android.stackexchange.com/questions/160479/why-do-i-need-to-turn-on-location-services-to-pair-with-a-bluetooth-device
+- https://support.netanalyzer-an.techet.net/article/124-why-does-the-app-require-location-permission-for-wifi-signal-when-other-apps-dont
+
 # Source
 This application is Routerkeygen derivate with UPC router support added. 
 For original project please refer to: https://play.google.com/store/apps/details?id=io.github.routerkeygen 

@@ -10,6 +10,7 @@ LOCAL_MODULE := upc
 
 # Include self headers
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
+LOCAL_CFLAGS += -fPIC
 
 # Source files
 JNI_SRC_DIR := src
